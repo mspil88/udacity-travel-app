@@ -15,6 +15,18 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static("dist"));
 
 
+app.listen("/geonames", (req, res) => {
+    res.send("accessing geonames")
+})
+
+app.listen("/weatherbit", (req, res) => {
+    res.send("accessing weatherbit")
+})
+
+app.list("pixabay", (req, res) => {
+    res.send("accessing pixabay")
+})
+
 app.listen(PORT, ()=> {
     console.log(`Server listening on port ${PORT}`)
 })
