@@ -1,0 +1,22 @@
+$backgroundColor: #f7f2ed;
+$maxWidth: 100%;
+$minWidth: 0;
+$gridGap: 10px;
+
+body {
+    width: $maxWidth;
+    margin: 0 auto;
+    background-color: $backgroundColor;
+    min-width: $minWidth;
+}
+
+.content-container {
+    max-width: $maxWidth;
+    display: grid;
+    grid-gap: $gridGap;
+    grid-template-areas: 
+        "header"
+        "main"
+        "footer"
+    ; 
+}

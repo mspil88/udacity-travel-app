@@ -1,0 +1,17 @@
+$backgroundColor: #f7f2ed;
+$btnColor: rgba(0, 0, 0, 0.8);
+
+.add-location {
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: $backgroundColor;
+}
+
+.add-tripBtn {
+    border-radius: 50%;
+    background-color: $btnColor;
+    color: $backgroundColor;
+    font-weight: bold;
+    // font-size: 15px;
+    // margin-right: 27%;
+}
