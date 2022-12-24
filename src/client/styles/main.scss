@@ -1,7 +1,9 @@
 $backgroundColor: #f7f2ed;
+$btnColor: rgba(0, 0, 0, 0.8);
 $maxWidth: 100%;
 $minWidth: 0;
 $gridGap: 10px;
+$font: Rubik;
 
 body {
     width: $maxWidth;
@@ -19,4 +21,53 @@ body {
         "main"
         "footer"
     ; 
+}
+
+.main {
+    // display: flex;
+    // flex-wrap: wrap;
+    // flex-direction: row;
+}
+
+.trip-container {
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.image-container{
+    border-right: 1px solid black;
+}
+
+.nav-container {
+    float: right;
+}
+
+.todo-btn {
+    // border-radius: 5px;
+    justify-content: space-evenly;
+    background-color: $btnColor;
+    color: $backgroundColor;
+    align-items: center;
+    font-family: $font;
+    height: 30px;
+    width: 60px;
+    margin-bottom: 10px;
+    transition: all 1s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+
+    &:hover {
+        background-color: $backgroundColor;
+        color: $btnColor;
+    }
+}
+
+.trip-info {
+    display: grid;
+    // grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+h1, p {
+    font-family: $font;
 }
