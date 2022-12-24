@@ -1,5 +1,6 @@
 $backgroundColor: #f7f2ed;
 $btnColor: rgba(0, 0, 0, 0.8);
+$font: Rubik;
 
 .add-location {
     border: none;
@@ -14,4 +15,15 @@ $btnColor: rgba(0, 0, 0, 0.8);
     font-weight: bold;
     // font-size: 15px;
     // margin-right: 27%;
+}
+
+.dt {
+    background-color: $backgroundColor;
+    border: none;
+    border-bottom: 1px solid black;
+    font-family: $font;
+}
+
+.dt-label {
+    font-family: $font;
 }
