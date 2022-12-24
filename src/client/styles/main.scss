@@ -12,6 +12,8 @@ body {
     min-width: $minWidth;
 }
 
+
+
 .content-container {
     max-width: $maxWidth;
     display: grid;
@@ -24,14 +26,16 @@ body {
 }
 
 .main {
-    // display: flex;
-    // flex-wrap: wrap;
-    // flex-direction: row;
+
 }
 
 .trip-container {
-    border: 1px solid black;
+    margin-top: 20px;
+    border: 1px solid $btnColor;
+    border-radius: 20px;
     margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .image-container{
@@ -70,4 +74,10 @@ body {
 
 h1, p {
     font-family: $font;
+    color: $btnColor;
+}
+
+.nav-container {
+    margin-right: 10px;
+    margin-top: 5px;
 }
