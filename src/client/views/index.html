@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Travel App</title>
+        <link rel="stylesheet" href="/styles/header.css">
+        <link rel="stylesheet" href="/styles/selection.css">
+        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="stylesheet" href="/styles/footer.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+    </head>
+    
+    <body>
+        <div class="content-container">
+            <header>
+                <div class="title">Travel Diary</div>
+            </header>
+            <section class="selection">
+                <input class="add-location" placeholder="add location"></input>
+                <label class="dt-label" for="start-date">Start Date: </label>
+                <input class="dt" type="date" name="start-date"></input>
+                <label class="dt-label" for="end-date">End Date: </label>
+                <input class="dt" type="date" name="end-date"></input>
+                <button class="add-tripBtn">+</button> 
+                
+            </section>
+            <section class="main">
+                
+                <div class="trip-container">
+                    <div class="nav-container">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <i class="fa-sharp fa-solid fa-trash"></i>
+                    </div>
+                    
+                    <div class="trip-info">
+                        <div class="image-container">
+                            <img src="sd.jpeg", class="img-placeholder"></img>
+                            <div class="to-do-container">
+                                <button class="todo-btn">ToDo</button>
+                            </div>
+                        </div>
+                    
+                        <div class="trip-info-container">
+                            <h1>Destination: </h1>
+                            <p>Start Date: </p>
+                            <p>End Date: </p>
+                            
+                            <h1>Forecast</h1>
+                            <p>Days with rain:</p>
+                            <p>Max temperature</p>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+                <div class="trip-container">
+                    <div class="nav-container">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <i class="fa-sharp fa-solid fa-trash"></i>
+                    </div>
+                    
+                    <div class="trip-info">
+                        <div class="image-container">
+                            <div class="img-placeholder">some img</div>
+                            <div class="to-do-container">
+                                <button class="todo-btn">ToDo</button>
+                            </div>
+                        </div>
+                    
+                        <div class="trip-info-container">
+                            <h1>Destination: </h1>
+                            <p>Start Date: </p>
+                            <p>End Date: </p>
+                            
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </section>
+            <footer>
+
+            </footer>
+        </div>
+    </body>
+</html>

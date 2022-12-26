@@ -1,0 +1,10 @@
+$font: Rubik;
+$titleFontSize: 8vw;
+$titleFontColor: rgba(0, 0, 0, 0.7);
+
+header {
+    font-family: $font;
+    font-size: $titleFontSize;
+    font-weight: bold;
+    color: $titleFontColor;
+}
