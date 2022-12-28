@@ -24,12 +24,9 @@ const geoNamesUrl = (location, userName) => {
 
 app.post("/userData", async (req, res) => {
     const location = req.body.location;
-    console.log(req.body)
-    console.log(process.env.GEONAMES_USER_NAME)
     const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
-    const {lng, lat} = data.data.geonames[0]
-    console.log(lng, lat)
-    res.send({longitude: lng, latitude: lat})
+    const {lng, lat, countryName} = data.data.geonames[0]
+    res.send({longitude: lng, latitude: lat, country: countryName})
 })
 
 
