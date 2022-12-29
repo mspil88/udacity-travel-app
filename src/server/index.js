@@ -17,6 +17,9 @@ app.use(express.static("dist"));
 
 
 
+const pixabayUrl = (location, minWidth, apiKey) => {
+	return `https://pixabay.com/api/?key=${apiKey}&q=${location}&image_type=photo&orientation=horizontal&min_width=${minWidth}`;
+};
 
 const geoNamesUrl = (location, userName) => {
     return `http://api.geonames.org/searchJSON?name=${location}&maxRows=1&username=${userName}`
@@ -32,18 +35,26 @@ app.post("/userData", async (req, res) => {
     const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
     .then(response => {
         const {lng, lat, countryName} = response.data.geonames[0]
-        return [lng, lat, countryName]
+        return [lng, lat, countryName, location]
         
     })
     .then(data => {
         //res.send(data)
         console.log(data)
-
-        let rv = axios.post(weatherbitUrl(data[0], data[1], process.env.WEATHER_BIT_API_KEY))
-        return rv;
+        const [lng, lat, countryName, location] = data;
+        let rv = axios.post(weatherbitUrl(lng, lat, process.env.WEATHER_BIT_API_KEY),
+                        )
+        // return [rv, location, countryName];
+        return rv
     })
     .then(res => {
-        console.log(res.data.data)
+        const city_name = res.data.city_name;
+        const weather_data = res.data.data;
+        let p_rv = axios.post(pixabayUrl(city_name, 1220, process.env.PIXABAY_API_KEY))
+        return p_rv
+    })
+    .then(r => {
+        console.log(r.data.hits[0].largeImageURL)
     })
 
     // res.send({longitude: data[0], latitude: data[1], country: data[2]})
