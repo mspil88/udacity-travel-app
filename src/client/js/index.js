@@ -2,7 +2,14 @@ const addTrip = document.querySelector(".add-tripBtn")
 const location = document.querySelector(".add-location")
 const startDate = document.querySelector(".start-dt")
 const endDate = document.querySelector(".end-dt")
+
+
+//temporary variables to test rendering logic
 const locationDurationDays = document.querySelector(".location-duration-days");
+const destinationInfo = document.querySelector(".destination-info");
+const startInfo = document.querySelector(".start-info");
+const endInfo = document.querySelector(".end-info");
+const locationPlaceholder = document.querySelector(".img-placeholder");
 
 const postData =  async (url = '', data = {}) => {
     //helper function to post data back, inspired by the fetch API documentation
@@ -60,16 +67,37 @@ const calculateDuration = (endDate) => {
 
 const handleEvent = () => {
     addTrip.addEventListener("click", async()=> {
-        console.log(location.value)
-        const data = await postData("http://localhost:8081/userData", {location: location.value})
+        const myLocation = location.value;
+        const data = await postData("http://localhost:8081/userData", {location: myLocation})
         const dayDiff = calculateDuration(endDate.value)
         locationDurationDays.textContent = `Trip in ${dayDiff} days`
         const returnData = await getData("http://localhost:8081/retrieveData");
-        console.log(returnData);
+        const [geoNamesData, weatherData, pixbayData] = returnData; 
+        // console.log(pixbayData);
+        renderTripInfo(myLocation, startDate.value, endDate.value, geoNamesData, weatherData, pixbayData);
 
     })
 }
-console.log("stuff")
+
+//temporary functions to test rendering
+
+const processMyLocation = (location) => {
+    const lowerCased = location.toLowerCase();
+    return lowerCased[0].toUpperCase()+lowerCased.slice(1, lowerCased.length);
+} 
+
+const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherData, pixbayData) => {
+    const url = pixbayData.url;
+    console.log(url)
+    destinationInfo.textContent = `Destination: ${processMyLocation(location)}, ${geoNamesData.country}`
+    startInfo.textContent = `Start Date: ${startDate}`
+    endInfo.textContent = `End Date: ${endDate}`
+    console.log(locationPlaceholder)
+    locationPlaceholder.src = pixbayData.url;
+}
+
+
+
 
 handleEvent();
 
