@@ -21,6 +21,18 @@ const postData =  async (url = '', data = {}) => {
     }
   }
 
+const getData = async(url = '') => {
+    try {
+      const response = await fetch(url, {
+          method: "GET",
+          mode: "cors"
+      });
+      return response.json();
+    } catch(error) {
+      console.log(error);
+    }
+}
+
 const reverseDate = (date) => {
     const split = date.split("/")
     return `${split[2]}/${split[1]}/${split[0]}`
@@ -40,7 +52,7 @@ const calculateDuration = (endDate) => {
     let today = new Date(Date.now()).toLocaleDateString().split(",")[0]
     today = reverseDate(today)
     console.log("TODAY")
-    console.log(today);
+    console.log(today); 
     endDate = reverseDate(endDate)
     
     return dayDifference(new Date(today), new Date(endDate));
@@ -52,6 +64,8 @@ const handleEvent = () => {
         const data = await postData("http://localhost:8081/userData", {location: location.value})
         const dayDiff = calculateDuration(endDate.value)
         locationDurationDays.textContent = `Trip in ${dayDiff} days`
+        const returnData = await getData("http://localhost:8081/retrieveData");
+        console.log(returnData);
 
     })
 }

@@ -29,33 +29,66 @@ const weatherbitUrl = (longitude, latitude, weatherBitAPI) => {
     return `http://api.weatherbit.io/v2.0/forecast/daily?key=${weatherBitAPI}&lat=${latitude}&lon=${longitude}`;
 }
 //http://api.weatherbit.io/v2.0/forecast/daily?key=1128eea57b1f47628f05f8eb4f91cbeb&lat=48.85341&lon=2.3488
+
+let geoNamesData = {}
+let weatherBitData = {}
+let pixabayData = {}
+
+
 app.post("/userData", async (req, res) => {
     const location = req.body.location;
+    
     // const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
     const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
     .then(response => {
         const {lng, lat, countryName} = response.data.geonames[0]
-        return [lng, lat, countryName, location]
+        geoNamesData = {longitude: lng,
+                         latitude: lat,
+                         country: countryName
+        };
+
+        return [lng, lat]
         
     })
-    .then(data => {
+    .then(response => {
         //res.send(data)
-        console.log(data)
-        const [lng, lat, countryName, location] = data;
+
+        const [lng, lat] = response;
         let rv = axios.post(weatherbitUrl(lng, lat, process.env.WEATHER_BIT_API_KEY),
                         )
-        // return [rv, location, countryName];
         return rv
     })
-    .then(res => {
-        const city_name = res.data.city_name;
-        const weather_data = res.data.data;
-        let p_rv = axios.post(pixabayUrl(city_name, 1220, process.env.PIXABAY_API_KEY))
-        return p_rv
+    .then(response => {
+
+        const city_name = response.data.city_name;
+        const weather_data = response.data.data;
+        weatherBitData = {city: city_name,
+                          weather: weather_data
+        }
+        return city_name
     })
-    .then(r => {
-        console.log(r.data.hits[0].largeImageURL)
+    .then(response => {
+        let p_rv = axios.post(pixabayUrl(response, 1220, process.env.PIXABAY_API_KEY))
+        console.log(p_rv)
+        return p_rv;
     })
+    .then(response => {
+        pixabayData = {url: response.data.hits[0].largeImageURL}
+        return;
+    })
+    .catch((error)=> {
+        console.log(error)
+    })
+    res.send({msg: "done"})
+    // .then(r => {
+    //     let p_rv = axios.post(pixabayUrl(r, 1220, process.env.PIXABAY_API_KEY))
+        
+    //     return p_rv.data.hits[0].largeImageURL;
+    // })
+    // .then(d=> {
+    //     pixabayData = {url: d.data.hits[0].largeImageURL}
+        
+    // })
 
     // res.send({longitude: data[0], latitude: data[1], country: data[2]})
     // const {lng, lat, countryName} = data.data.geonames[0]
@@ -63,6 +96,16 @@ app.post("/userData", async (req, res) => {
     // return res.send({longitude: lng, latitude: lat, country: countryName})
         
 })
+
+app.get("/retrieveData", async (req, res) => {
+    console.log("get route")
+    console.log(geoNamesData)
+    // console.log(weatherBitData)
+    console.log(pixabayData)
+
+    res.status(200).json([geoNamesData, weatherBitData, pixabayData])
+})
+
 
 
 app.listen(PORT, ()=> {
