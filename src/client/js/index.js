@@ -68,13 +68,15 @@ const calculateDuration = (endDate) => {
 const handleEvent = () => {
     addTrip.addEventListener("click", async()=> {
         const myLocation = location.value;
-        const data = await postData("http://localhost:8081/userData", {location: myLocation})
-        const dayDiff = calculateDuration(endDate.value)
+        const myStartDate = startDate.value;
+        const myEndDate = endDate.value;
+        const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
+        const dayDiff = calculateDuration(myEndDate)
         locationDurationDays.textContent = `Trip in ${dayDiff} days`
         const returnData = await getData("http://localhost:8081/retrieveData");
         const [geoNamesData, weatherData, pixbayData] = returnData; 
-        // console.log(pixbayData);
-        renderTripInfo(myLocation, startDate.value, endDate.value, geoNamesData, weatherData, pixbayData);
+        console.log(weatherData);
+        renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherData, pixbayData);
 
     })
 }
