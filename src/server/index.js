@@ -36,9 +36,8 @@ let pixabayData = {}
 
 
 app.post("/userData", async (req, res) => {
-    const {location, start, end} = req.body;
+    const {location} = req.body;
     console.log("REQ PARAMS")
-    console.log(start, end)
     
     const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
     .then(response => {

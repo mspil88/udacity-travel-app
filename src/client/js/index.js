@@ -10,6 +10,11 @@ const destinationInfo = document.querySelector(".destination-info");
 const startInfo = document.querySelector(".start-info");
 const endInfo = document.querySelector(".end-info");
 const locationPlaceholder = document.querySelector(".img-placeholder");
+const maxTempElem = document.querySelector(".max-temp");
+const minTempElem = document.querySelector(".min-temp");
+const modeWeatherElem = document.querySelector(".mode-weather");
+const countRainElem = document.querySelector(".count-rain");
+
 
 const postData =  async (url = '', data = {}) => {
     //helper function to post data back, inspired by the fetch API documentation
@@ -65,19 +70,93 @@ const calculateDuration = (endDate) => {
     return dayDifference(new Date(today), new Date(endDate));
 }
 
+const getMaxTemperature = (weatherData) => {
+    let maxTemp = - 1000;
+
+    for(let i of weatherData.weather) {
+        if(i.app_max_temp > maxTemp) {
+            maxTemp = i.app_max_temp
+        } else {
+            continue
+        }
+      }
+    return maxTemp;
+    
+}
+
+const getMinTemperature = (weatherData) => {
+  let minTemp = 1000;
+
+  for(let i of weatherData.weather) {
+      if(i.app_min_temp < minTemp) {
+          minTemp = i.app_min_temp
+      } else {
+          continue
+      }
+    }
+  return minTemp;
+}
+
+const aggregateWeather = (weatherData) => {
+  let weather = {}
+
+  for(let i of weatherData.weather) {
+      if(i.weather.description in weather) {
+          weather[i.weather.description] ++
+      } else {
+          weather[i.weather.description] = 1
+      }
+  }
+
+  return weather
+
+}
+
+const countRainyDays = (weatherData) => {
+    let rainyDays = 0
+
+    for(let i of weatherData.weather) {
+        if(i.weather.description.includes("rain")) {
+          rainyDays ++;
+        }
+    }
+
+    return rainyDays
+
+}
+
+const groupByMax = (weatherData) => {
+  const aggregatedWeather = aggregateWeather(weatherData)
+  console.log(aggregatedWeather)
+  const maxValue = Math.max(...Object.values(aggregatedWeather))
+  console.log(maxValue)
+
+  return Object.keys(aggregatedWeather).filter(key => aggregatedWeather[key] == maxValue)
+}
+
+
+
 const handleEvent = () => {
     addTrip.addEventListener("click", async()=> {
         const myLocation = location.value;
         const myStartDate = startDate.value;
         const myEndDate = endDate.value;
         const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
-        const dayDiff = calculateDuration(myEndDate)
-        locationDurationDays.textContent = `Trip in ${dayDiff} days`
+        const dayDiff = calculateDuration(myStartDate)
+        locationDurationDays.textContent = `Your trip is in ${dayDiff} days`
         const returnData = await getData("http://localhost:8081/retrieveData");
-        const [geoNamesData, weatherData, pixbayData] = returnData; 
-        console.log(weatherData);
-        renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherData, pixbayData);
-
+        const [geoNamesData, weatherData, pixbayData] = returnData;
+        const weatherObj = {maxTemperature: getMaxTemperature(weatherData),
+                            minTemperature: getMinTemperature(weatherData),
+                            modalWeather: groupByMax(weatherData),
+                            rainyDays: countRainyDays(weatherData)
+                            } 
+        
+        renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherObj, pixbayData);
+        console.log(getMaxTemperature(weatherData))
+        console.log(getMinTemperature(weatherData))
+        console.log(groupByMax(weatherData))
+        console.log(countRainyDays(weatherData));
     })
 }
 
@@ -88,7 +167,7 @@ const processMyLocation = (location) => {
     return lowerCased[0].toUpperCase()+lowerCased.slice(1, lowerCased.length);
 } 
 
-const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherData, pixbayData) => {
+const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherObj, pixbayData) => {
     const url = pixbayData.url;
     console.log(url)
     destinationInfo.textContent = `Destination: ${processMyLocation(location)}, ${geoNamesData.country}`
@@ -96,6 +175,10 @@ const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherData,
     endInfo.textContent = `End Date: ${endDate}`
     console.log(locationPlaceholder)
     locationPlaceholder.src = pixbayData.url;
+    maxTempElem.textContent = `Max temperture: ${weatherObj.maxTemperature}`
+    minTempElem.textContent = `Min temperature: ${weatherObj.minTemperature}`
+    modeWeatherElem.textContent = `Most common forecast: ${weatherObj.modalWeather[0]}`
+    countRainElem.textContent = `Days with rain: ${weatherObj.rainyDays}`
 }
 
 
