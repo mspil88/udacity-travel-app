@@ -45,9 +45,6 @@ body {
     float: right;
 }
 
-.my-next-trip {
-    margin-left: 1em;
-}
 
 .img-container {
     position: relative;
@@ -57,6 +54,7 @@ body {
 .img-placeholder {
     max-width: 300px;
     min-height: 250px;
+    border-radius: 5%;
 }
 
 .todo-btn {

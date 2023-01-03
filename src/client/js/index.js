@@ -65,7 +65,7 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   console.log("CREATING ELEM")
   console.log(destination)
   destinationInfo.textContent = `Destination: ${destination}`
-  startInfo.textContent = `Start date: ${startDate}`
+  startInfo.textContent = `Departure: ${startDate}`
   endInfo.textContent = `End date: ${endDate}`
 
 
