@@ -9,12 +9,14 @@ $font: Rubik;
 }
 
 .add-tripBtn {
-    border-radius: 50%;
-    background-color: $btnColor;
-    color: $backgroundColor;
-    font-weight: bold;
+    // border-radius: 50%;
+    // background-color: $btnColor;
+    // color: $backgroundColor;
+    // font-weight: bold;
     // font-size: 15px;
     // margin-right: 27%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .dt {

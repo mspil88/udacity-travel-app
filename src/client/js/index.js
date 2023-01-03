@@ -18,7 +18,6 @@ const mainSection = document.querySelector(".main")
 const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) => {
   const tripContainer = document.createElement("div")
   const navContainer = document.createElement("div")
-  const pdfBtn = document.createElement("i")
   const trashBtn = document.createElement("i")
   const tripInfo = document.createElement("div")
   const imgContainer = document.createElement("div")
@@ -39,7 +38,6 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   tripContainer.setAttribute("class", `trip-container trip-${tripId}`)
   navContainer.setAttribute("class", `nav-container nav-${tripId}`)
   tripInfo.setAttribute("class", `trip-info trip-info-${tripId}`)
-  pdfBtn.setAttribute("class", `fa-solid fa-file-pdf pdf-${tripId}`)
   trashBtn.setAttribute("class", `fa-sharp fa-solid fa-trash trash-${tripId}`)
   imgContainer.setAttribute("class", `image-container img-container-${tripId}`)
   img.setAttribute("class", `img-placeholder img-placeholder-${tripId}`)
@@ -74,7 +72,6 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
 
   
   tripContainer.appendChild(navContainer)
-  navContainer.appendChild(pdfBtn)
   navContainer.appendChild(trashBtn)
 
   tripContainer.appendChild(tripInfo)
