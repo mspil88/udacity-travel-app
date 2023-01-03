@@ -2,6 +2,20 @@ $backgroundColor: #f7f2ed;
 $btnColor: rgba(0, 0, 0, 0.8);
 $font: Rubik;
 
+.selection {
+    margin-left: 1em;
+}
+
+input {
+    margin-right: 1em;
+}
+
+.my-next-trip {
+    font-weight: bold;
+    margin-top: 2em;
+}
+
+
 .add-location {
     border: none;
     border-bottom: 1px solid black;

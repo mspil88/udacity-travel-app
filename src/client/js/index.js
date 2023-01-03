@@ -1,21 +1,28 @@
+import {jsPDF} from "jsPDF"
+
 const addTrip = document.querySelector(".add-tripBtn")
 const location = document.querySelector(".add-location")
 const startDate = document.querySelector(".start-dt")
 const endDate = document.querySelector(".end-dt")
 const mainSection = document.querySelector(".main")
+const addPdf = document.querySelector(".add-pdf")
+
+addPdf.addEventListener("click", ()=> {
+    const doc = new jsPDF("l", "mm", "a4")
+    const pdfElements = document.querySelector(".main")
+
+    doc.html(pdfElements, {
+        callback: (pdf) => {
+            pdf.save("myTrips.pdf")
+        },
+        margin: 32
+    })
+})
 
 
-//temporary variables to test rendering logic
-// const locationDurationDays = document.querySelector(".location-duration-days");
-// const destinationInfo = document.querySelector(".destination-info");
-// const startInfo = document.querySelector(".start-info");
-// const endInfo = document.querySelector(".end-info");
-// const locationPlaceholder = document.querySelector(".img-placeholder");
-// const maxTempElem = document.querySelector(".max-temp");
-// const minTempElem = document.querySelector(".min-temp");
-// const modeWeatherElem = document.querySelector(".mode-weather");
-// const countRainElem = document.querySelector(".count-rain");
 const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) => {
+  
+  const tripDuration = calculateDuration(startDate, endDate)
   const tripContainer = document.createElement("div")
   const navContainer = document.createElement("div")
   const trashBtn = document.createElement("i")
@@ -25,7 +32,7 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   const todoContainer = document.createElement("div")
   const todoBtn = document.createElement("btn")
   const tripInfoContainer = document.createElement("div")
-  const destinationInfo = document.createElement("h1")
+  const destinationInfo = document.createElement("p")
   const startInfo = document.createElement("p")
   const endInfo = document.createElement("p")
   const locationDurationDays = document.createElement("p")
@@ -60,7 +67,9 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   destinationInfo.textContent = `Destination: ${destination}`
   startInfo.textContent = `Start date: ${startDate}`
   endInfo.textContent = `End date: ${endDate}`
-  locationDurationDays.textContent = `I am going to ${destination} for ${calculateDuration(startDate, endDate)} days`
+
+
+  locationDurationDays.textContent = tripDuration > 1 ? `Duration: ${tripDuration} days` : `Duration: ${tripDuration} day` 
 
   forecast.textContent = "Forecast"
   maximumTemp.textContent = `Max temperature: ${maxTemp}`
@@ -68,28 +77,28 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   modeWeather.textContent = `Most common forecast: ${modeForecast}`
   countRain.textContent = `Days with rain: ${rainyDays}`
 
-
-
   
   tripContainer.appendChild(navContainer)
   navContainer.appendChild(trashBtn)
 
   tripContainer.appendChild(tripInfo)
+
   tripInfo.appendChild(imgContainer)
   imgContainer.appendChild(img)
-  imgContainer.appendChild(todoContainer)
-  todoContainer.appendChild(todoBtn)
 
   tripInfo.appendChild(tripInfoContainer)
   tripInfoContainer.appendChild(destinationInfo)
   tripInfoContainer.appendChild(startInfo)
-  tripInfoContainer.appendChild(endInfo)
+  // tripInfoContainer.appendChild(endInfo)
   tripInfoContainer.appendChild(locationDurationDays)
-  tripInfoContainer.appendChild(forecast)
+  // tripInfoContainer.appendChild(forecast)
   tripInfoContainer.appendChild(maximumTemp)
   tripInfoContainer.appendChild(minimumTemp)
   tripInfoContainer.appendChild(modeWeather)
   tripInfoContainer.appendChild(countRain)
+
+
+
 
   return tripContainer
 }

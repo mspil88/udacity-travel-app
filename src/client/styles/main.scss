@@ -26,24 +26,37 @@ body {
 }
 
 .main {
-
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .trip-container {
     margin-top: 20px;
-    border: 1px solid $btnColor;
-    border-radius: 20px;
+    border-bottom: 1px solid $btnColor;
+    // border-radius: 20px;
     margin-bottom: 10px;
     margin-left: 20px;
     margin-right: 20px;
+    // width: 100%;
 }
 
-// .image-container{
-//     border-right: 1px solid black;
-// }
 
 .nav-container {
     float: right;
+}
+
+.my-next-trip {
+    margin-left: 1em;
+}
+
+.img-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.img-placeholder {
+    max-width: 300px;
+    min-height: 250px;
 }
 
 .todo-btn {
@@ -67,9 +80,18 @@ body {
 }
 
 .trip-info {
-    display: grid;
+    display: flex;
     // grid-template-columns: repeat(3, 1fr);
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.trip-info-container {
+    margin-left: 1em;
+    margin-top: 0;
+}
+
+.destination-info {
+    font-weight: bold;
 }
 
 h1, p {
@@ -82,7 +104,3 @@ h1, p {
     margin-top: 5px;
 }
 
-.img-placeholder {
-    width: 100px;
-    height: 100px;
-}
