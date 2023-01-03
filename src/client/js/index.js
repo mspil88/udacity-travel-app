@@ -15,7 +15,7 @@ const mainSection = document.querySelector(".main")
 // const minTempElem = document.querySelector(".min-temp");
 // const modeWeatherElem = document.querySelector(".mode-weather");
 // const countRainElem = document.querySelector(".count-rain");
-const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays) => {
+const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) => {
   const tripContainer = document.createElement("div")
   const navContainer = document.createElement("div")
   const pdfBtn = document.createElement("i")
@@ -57,12 +57,14 @@ const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp,
   countRain.setAttribute("class", `count-rain count-rain-${tripId}`)
 
   img.setAttribute("src", image)
-
+  console.log("CREATING ELEM")
+  console.log(destination)
   destinationInfo.textContent = `Destination: ${destination}`
   startInfo.textContent = `Start date: ${startDate}`
   endInfo.textContent = `End date: ${endDate}`
-  locationDurationDays.textContent = `Trip to ${destination} is ${calculateDuration(startDate)} days away`
+  locationDurationDays.textContent = `I am going to ${destination} for ${calculateDuration(startDate, endDate)} days`
 
+  forecast.textContent = "Forecast"
   maximumTemp.textContent = `Max temperature: ${maxTemp}`
   minimumTemp.textContent = `Min temperature: ${minTemp}`
   modeWeather.textContent = `Most common forecast: ${modeForecast}`
@@ -155,9 +157,9 @@ const getLocalStorage = () => {
 }
 
 class Trip {
-    constructor(id, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays) {
+    constructor(id, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) {
         this.id = id
-        this.destination = destination
+        this.destination = country !== undefined ? `${destination}, ${country}` : destination
         this.startDate = startDate
         this.endDate = endDate
         this.image = image
@@ -165,17 +167,19 @@ class Trip {
         this.minTemp = minTemp
         this.modeForecast = modeForecast
         this.rainyDays = rainyDays
+        this.country = country
     }
 
     getTrip() {
-        return {destination: this.destination,
+        return {destination: `${this.destination}`,
                 startDate: this.startDate,
                 endDate: this.endDate,
                 image: this.image,
                 maxTemp: this.maxTemp,
                 minTemp: this.minTemp,
                 modeForecast: this.modeForecast,
-                rainyDays: this.rainyDays}
+                rainyDays: this.rainyDays,
+                }
         }
     
     getTripId() {
@@ -183,7 +187,7 @@ class Trip {
     }
 
     createTrip() {
-        const elem = createTripElem(this.getTripId(), this.destination, this.startDate, this.endDate, this.image, this.maxTemp, this.minTemp,
+        const elem = createTripElem(this.getTripId(), `${this.destination}`, this.startDate, this.endDate, this.image, this.maxTemp, this.minTemp,
                                     this.modeForecast, this.rainyDays)
         return elem
                                   
@@ -205,6 +209,7 @@ class TripList {
         this.addTripBtn = document.querySelector(".add-tripBtn")
         this.id = generateID()
         this.addTripsFromLocal()
+        this.mostRecentTrip = updateMostRecentTrip()
 
         this.addTripBtn.addEventListener("click", async ()=> {
             const myLocation = document.querySelector(".add-location").value;
@@ -223,10 +228,12 @@ class TripList {
             
             // renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherObj, pixbayData);
             const id = this.addTrip(myLocation, myStartDate, myEndDate, pixbayData.url, weatherObj.maxTemperature, weatherObj.minTemperature,
-                                    weatherObj.modalWeather, weatherObj.rainyDays)
+                                    weatherObj.modalWeather, weatherObj.rainyDays, geoNamesData.country)
             this.createTripElement(id)
             this.addEventListenersToElem(this.tripElements[this.tripElements.length-1].getAttribute("class").split("-")[2])
+            console.log(this.TripMap)
             this.setTripsInLocalStorage();
+            updateMostRecentTrip();
         })
 
 
@@ -235,9 +242,9 @@ class TripList {
         setLocalStorage([...this.tripMap.values()])
     }
 
-    addTrip(location, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays) {
+    addTrip(location, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) {
         const tripId = this.id.next().value;
-        let trip = new Trip(tripId, location, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays)
+        let trip = new Trip(tripId, location, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country)
         this.tripMap.set(tripId, trip)
         return tripId
     }
@@ -347,15 +354,79 @@ const dayDifference = (startDate, endDate) => {
   return Math.floor((endUTC - startUTC) / MSECS_PER_DAY);
 }
 
+const parseDestinationTimes = (container) => {
+  let destinationsToSort = []
+  for(let i of container) {
+      if((i["startDate"].length === 10) & (i["endDate"].length === 10)) {
+          destinationsToSort.push({name: i["destination"], date: new Date(i["startDate"])})
+      }
+  }
 
-const calculateDuration = (endDate) => {
-    let today = new Date(Date.now()).toLocaleDateString().split(",")[0]
-    today = reverseDate(today)
-    console.log("TODAY")
-    console.log(today); 
+  return destinationsToSort
+}
+
+const returnMostRecentInfo = (sortedDestinations) => {
+  const mostRecent = sortedDestinations[0]
+  const mostRecentDate = convertToYYYMMDD(mostRecent.date)
+  return [mostRecent.name, mostRecentDate, calculateDurationToNow(mostRecentDate) ]
+}
+
+const getMostRecentTrip = () => {
+  
+  const storedTrips = getLocalStorage()
+  console.log("storedTRIPS")
+  console.log(storedTrips)
+  console.log(storedTrips.length === 0)
+
+  if(!((storedTrips.length === 0) || (storedTrips === null))) {
+    const destinationsToSort = parseDestinationTimes(storedTrips);
+    destinationsToSort.sort((a, b) => {
+        return ((a.date < b.date) ? -1 : ((a.date == b.date) ? 0 : 1));
+    });
+    return returnMostRecentInfo(destinationsToSort)  
+    }
+  return null;
+
+}
+
+
+const calculateDurationToNow = (dt) => {
+  let today = new Date(Date.now()).toLocaleDateString().split(",")[0]
+  today = reverseDate(today)
+  console.log("TODAY")
+  console.log(today); 
+
+  const endDate = reverseDate(dt)
+  
+  return dayDifference(new Date(today), new Date(dt));
+}
+
+const convertToYYYMMDD = (date) => {
+  //credit: https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd
+  const dt = Date.parse(date)
+  const date_obj = new Date(dt)
+  return `${date_obj.getFullYear()}-${date_obj.toLocaleString("default", { month: "2-digit" })}-${date_obj.toLocaleString("default", { day: "2-digit"})}`
+}
+
+const updateMostRecentTrip = () => {
+    const mostRecentTrip = getMostRecentTrip()
+    const nextTripElem = document.querySelector(".my-next-trip")
+    mostRecentTrip !== null 
+    ? nextTripElem.textContent = `My next trip is to ${mostRecentTrip[0]} in ${mostRecentTrip[2]} days`
+    : nextTripElem.textContent = ''
+
+}
+
+
+const calculateDuration = (startDate, endDate) => {
+    // let today = new Date(Date.now()).toLocaleDateString().split(",")[0]
+    // today = reverseDate(today)
+    // console.log("TODAY")
+    // console.log(today); 
+    startDate = reverseDate(startDate)
     endDate = reverseDate(endDate)
     
-    return dayDifference(new Date(today), new Date(endDate));
+    return dayDifference(new Date(startDate), new Date(endDate));
 }
 
 const getMaxTemperature = (weatherData) => {
@@ -452,19 +523,19 @@ const processMyLocation = (location) => {
     return lowerCased[0].toUpperCase()+lowerCased.slice(1, lowerCased.length);
 } 
 
-const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherObj, pixbayData) => {
-    const url = pixbayData.url;
-    console.log(url)
-    destinationInfo.textContent = `Destination: ${processMyLocation(location)}, ${geoNamesData.country}`
-    startInfo.textContent = `Start Date: ${startDate}`
-    endInfo.textContent = `End Date: ${endDate}`
-    console.log(locationPlaceholder)
-    locationPlaceholder.src = pixbayData.url;
-    maxTempElem.textContent = `Max temperture: ${weatherObj.maxTemperature}`
-    minTempElem.textContent = `Min temperature: ${weatherObj.minTemperature}`
-    modeWeatherElem.textContent = `Most common forecast: ${weatherObj.modalWeather[0]}`
-    countRainElem.textContent = `Days with rain: ${weatherObj.rainyDays}`
-}
+// const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherObj, pixbayData) => {
+//     const url = pixbayData.url;
+//     console.log(url)
+//     destinationInfo.textContent = `Destination: ${processMyLocation(location)}, ${geoNamesData.country}`
+//     startInfo.textContent = `Start Date: ${startDate}`
+//     endInfo.textContent = `End Date: ${endDate}`
+//     console.log(locationPlaceholder)
+//     locationPlaceholder.src = pixbayData.url;
+//     maxTempElem.textContent = `Max temperture: ${weatherObj.maxTemperature}`
+//     minTempElem.textContent = `Min temperature: ${weatherObj.minTemperature}`
+//     modeWeatherElem.textContent = `Most common forecast: ${weatherObj.modalWeather[0]}`
+//     countRainElem.textContent = `Days with rain: ${weatherObj.rainyDays}`
+// }
 
 
 // let list = new TripList(mainSection)
