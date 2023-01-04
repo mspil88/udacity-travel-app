@@ -23,69 +23,30 @@
                 <input class="dt start-dt" type="date" name="start-date"></input>
                 <label class="dt-label" for="end-date">End Date: </label>
                 <input class="dt end-dt" type="date" name="end-date"></input>
-                <button class="add-tripBtn">+</button> 
                 
+                <!-- <button class="add-tripBtn">+</button>  -->
+                <i class="fa-solid fa-circle-plus fa-xl add-tripBtn"></i>
+                <i class="fa-solid fa-file-pdf fa-xl add-pdf"></i>
+                <div class="error-container">
+                    <p class="error-msg"></p>
+                </div>
+                <div class="next-trip-container">
+                    <p class="my-next-trip">My next trip is to _____ in ___ days</p>
+                </div>
             </section>
             <section class="main">
-                
-                <div class="trip-container">
-                    <div class="nav-container">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <i class="fa-sharp fa-solid fa-trash"></i>
-                    </div>
-                    
-                    <div class="trip-info">
-                        <div class="image-container">
-                            <img src="sd.jpeg", class="img-placeholder"></img>
-                            <div class="to-do-container">
-                                <button class="todo-btn">ToDo</button>
-                            </div>
-                        </div>
-                    
-                        <div class="trip-info-container">
-                            <h1>Destination: </h1>
-                            <p>Start Date: </p>
-                            <p>End Date: </p>
-                            <p class="location-duration-days">Trip to Paris is 100 days away</p>
-                            
-                            <h1>Forecast</h1>
-                            <p>Days with rain:</p>
-                            <p>Max temperature</p>
-                        </div>
-                    </div>
-                    
 
-                </div>
-
-                <div class="trip-container">
-                    <div class="nav-container">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <i class="fa-sharp fa-solid fa-trash"></i>
-                    </div>
-                    
-                    <div class="trip-info">
-                        <div class="image-container">
-                            <div class="img-placeholder">some img</div>
-                            <div class="to-do-container">
-                                <button class="todo-btn">ToDo</button>
-                            </div>
-                        </div>
-                    
-                        <div class="trip-info-container">
-                            <h1>Destination: </h1>
-                            <p>Start Date: </p>
-                            <p>End Date: </p>
-                            
-                            
-                        </div>
-                    </div>
-                    
-
-                </div>
             </section>
             <footer>
 
             </footer>
         </div>
     </body>
+    <!-- <script>
+        if("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/service-worker.js")
+            })
+        }
+    </script> -->
 </html>
