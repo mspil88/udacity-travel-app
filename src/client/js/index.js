@@ -1,4 +1,4 @@
-import {jsPDF} from "jsPDF"
+// import {jsPDF} from "jsPDF"
 
 const addTrip = document.querySelector(".add-tripBtn")
 const location = document.querySelector(".add-location")
@@ -8,17 +8,17 @@ const mainSection = document.querySelector(".main")
 const addPdf = document.querySelector(".add-pdf")
 const errorMsg = document.querySelector(".error-msg")
 
-addPdf.addEventListener("click", ()=> {
-    const doc = new jsPDF("l", "mm", "a4")
-    const pdfElements = document.querySelector(".main")
+// addPdf.addEventListener("click", ()=> {
+//     const doc = new jsPDF("l", "mm", "a4")
+//     const pdfElements = document.querySelector(".main")
 
-    doc.html(pdfElements, {
-        callback: (pdf) => {
-            pdf.save("myTrips.pdf")
-        },
-        margin: 32
-    })
-})
+//     doc.html(pdfElements, {
+//         callback: (pdf) => {
+//             pdf.save("myTrips.pdf")
+//         },
+//         margin: 32
+//     })
+// })
 
 
 const createTripElem = (tripId, destination, startDate, endDate, image, maxTemp, minTemp, modeForecast, rainyDays, country) => {
@@ -420,9 +420,9 @@ const convertToYYYMMDD = (date) => {
 const updateMostRecentTrip = () => {
     const mostRecentTrip = getMostRecentTrip()
     const nextTripElem = document.querySelector(".my-next-trip")
-    mostRecentTrip !== null 
-    ? nextTripElem.textContent = `My next trip is to ${mostRecentTrip[0]} in ${mostRecentTrip[2]} days`
-    : nextTripElem.textContent = ''
+    if(mostRecentTrip !== null) { 
+        nextTripElem.textContent = `My next trip is to ${mostRecentTrip[0]} in ${mostRecentTrip[2]} days`
+    }
 
 }
 
@@ -518,4 +518,4 @@ const handleEvent = () => {
 
 handleEvent();
 
-export {handleEvent}
+export {handleEvent, reverseDate}

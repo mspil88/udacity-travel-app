@@ -4,6 +4,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { moduleExpression } = require("@babel/types");
 dotenv.config();
 
 const PORT = 8081;
@@ -95,3 +96,5 @@ app.get("/retrieveData", async (req, res) => {
 app.listen(PORT, ()=> {
     console.log(`Server listening on port ${PORT}`)
 })
+
+module.exports = PORT
