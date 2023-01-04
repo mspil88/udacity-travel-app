@@ -219,12 +219,11 @@ class TripList {
         this.mostRecentTrip = updateMostRecentTrip()
 
         this.addTripBtn.addEventListener("click", async ()=> {
-            const myLocation = document.querySelector(".add-location").value.trim();
+            const myLocation = document.querySelector(".add-location").value;
             const myStartDate = document.querySelector(".start-dt").value;
             const myEndDate = document.querySelector(".end-dt").value;
-
-            if(!myLocation === "") {
-              
+            console.log("MY LOCATION")
+            console.log(myLocation)
 
               const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
             
@@ -244,12 +243,7 @@ class TripList {
               console.log(this.TripMap)
               this.setTripsInLocalStorage();
               updateMostRecentTrip();
-            } else {
-                errorMsg.textContent = "Please enter a valid location";
-                setTimeout(()=> {
-                    errorMsg.remove();
-                }, 5000)
-            }
+            
         })
 
 
@@ -392,9 +386,8 @@ const getMostRecentTrip = () => {
   const storedTrips = getLocalStorage()
   console.log("storedTRIPS")
   console.log(storedTrips)
-  console.log(storedTrips.length === 0)
 
-  if(!((storedTrips.length === 0) || (storedTrips === null))) {
+  if(storedTrips) {
     const destinationsToSort = parseDestinationTimes(storedTrips);
     destinationsToSort.sort((a, b) => {
         return ((a.date < b.date) ? -1 : ((a.date == b.date) ? 0 : 1));
@@ -511,58 +504,18 @@ const groupByMax = (weatherData) => {
 
 
 
-const handleEvent = () => {
-    
-    addTrip.addEventListener("click", async()=> {
-        const myLocation = location.value;
-        const myStartDate = startDate.value;
-        const myEndDate = endDate.value;
-        const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
-       
-        const returnData = await getData("http://localhost:8081/retrieveData");
-        const [geoNamesData, weatherData, pixbayData] = returnData;
-        const weatherObj = {maxTemperature: getMaxTemperature(weatherData),
-                            minTemperature: getMinTemperature(weatherData),
-                            modalWeather: groupByMax(weatherData),
-                            rainyDays: countRainyDays(weatherData)
-                            } 
-        
-                            let list = new TripList(mainSection)
-
-    })
-}
-
-//temporary functions to test rendering
-
 const processMyLocation = (location) => {
     const lowerCased = location.toLowerCase();
     return lowerCased[0].toUpperCase()+lowerCased.slice(1, lowerCased.length);
 } 
 
-// const renderTripInfo = (location, startDate, endDate, geoNamesData, weatherObj, pixbayData) => {
-//     const url = pixbayData.url;
-//     console.log(url)
-//     destinationInfo.textContent = `Destination: ${processMyLocation(location)}, ${geoNamesData.country}`
-//     startInfo.textContent = `Start Date: ${startDate}`
-//     endInfo.textContent = `End Date: ${endDate}`
-//     console.log(locationPlaceholder)
-//     locationPlaceholder.src = pixbayData.url;
-//     maxTempElem.textContent = `Max temperture: ${weatherObj.maxTemperature}`
-//     minTempElem.textContent = `Min temperature: ${weatherObj.minTemperature}`
-//     modeWeatherElem.textContent = `Most common forecast: ${weatherObj.modalWeather[0]}`
-//     countRainElem.textContent = `Days with rain: ${weatherObj.rainyDays}`
-// }
 
-
-// let list = new TripList(mainSection)
-
-const handleEvent2 = () => {
+const handleEvent = () => {
   let list = new TripList(mainSection)
 }
 
-// handleEvent();
 
 
-handleEvent2();
+handleEvent();
 
-export {handleEvent2}
+export {handleEvent}
