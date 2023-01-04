@@ -4,11 +4,15 @@ $font: Rubik;
 
 .selection {
     margin-left: 1em;
+    
+    input {
+        margin-right: 1em;
+    }
+
+
 }
 
-input {
-    margin-right: 1em;
-}
+
 
 .my-next-trip {
     font-weight: bold;
@@ -22,15 +26,13 @@ input {
     background-color: $backgroundColor;
 }
 
-.add-tripBtn {
-    // border-radius: 50%;
-    // background-color: $btnColor;
-    // color: $backgroundColor;
-    // font-weight: bold;
-    // font-size: 15px;
-    // margin-right: 27%;
+i {
     padding-left: 10px;
     padding-right: 10px;
+
+    &:hover {
+        color: $btnColor;
+    }
 }
 
 .dt {
@@ -43,3 +45,4 @@ input {
 .dt-label {
     font-family: $font;
 }
+
