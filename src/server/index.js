@@ -7,6 +7,11 @@ const cors = require("cors");
 const { moduleExpression } = require("@babel/types");
 dotenv.config();
 
+//defining keys for submission purpose
+const GEONAMES_USER_NAME = "infinite1861" 
+const WEATHERBIT_API_KEY = "1128eea57b1f47628f05f8eb4f91cbeb"
+const PIXABAY_API_KEY = "32234499-97b8e8b7f8d859ab839b15f28"
+
 const PORT = 8081;
 
 const app = express();
@@ -40,7 +45,7 @@ app.post("/userData", async (req, res) => {
     const {location} = req.body;
     console.log("REQ PARAMS")
     
-    const data = await axios.post(geoNamesUrl(location, process.env.GEONAMES_USER_NAME))
+    const data = await axios.post(geoNamesUrl(location, GEONAMES_USER_NAME))
     .then(response => {
         const {lng, lat, countryName} = response.data.geonames[0]
         geoNamesData = {longitude: lng,
@@ -54,7 +59,7 @@ app.post("/userData", async (req, res) => {
     .then(response => {
 
         const [lng, lat] = response;
-        let rv = axios.post(weatherbitUrl(lng, lat, process.env.WEATHER_BIT_API_KEY),
+        let rv = axios.post(weatherbitUrl(lng, lat, WEATHERBIT_API_KEY),
                         )
         return rv
     })
@@ -68,12 +73,13 @@ app.post("/userData", async (req, res) => {
         return city_name
     })
     .then(response => {
-        let p_rv = axios.post(pixabayUrl(response, 1220, process.env.PIXABAY_API_KEY))
+        let p_rv = axios.post(pixabayUrl(response, 1220, PIXABAY_API_KEY))
         console.log(p_rv)
         return p_rv;
     })
     .then(response => {
         pixabayData = {url: response.data.hits[0].largeImageURL}
+        
         return;
     })
     .catch((error)=> {
