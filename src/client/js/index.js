@@ -6,6 +6,7 @@ const startDate = document.querySelector(".start-dt")
 const endDate = document.querySelector(".end-dt")
 const mainSection = document.querySelector(".main")
 const addPdf = document.querySelector(".add-pdf")
+const errorMsg = document.querySelector(".error-msg")
 
 addPdf.addEventListener("click", ()=> {
     const doc = new jsPDF("l", "mm", "a4")
@@ -218,28 +219,37 @@ class TripList {
         this.mostRecentTrip = updateMostRecentTrip()
 
         this.addTripBtn.addEventListener("click", async ()=> {
-            const myLocation = document.querySelector(".add-location").value;
+            const myLocation = document.querySelector(".add-location").value.trim();
             const myStartDate = document.querySelector(".start-dt").value;
             const myEndDate = document.querySelector(".end-dt").value;
 
-            const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
-           
-            const returnData = await getData("http://localhost:8081/retrieveData");
-            const [geoNamesData, weatherData, pixbayData] = returnData;
-            const weatherObj = {maxTemperature: getMaxTemperature(weatherData),
-                                minTemperature: getMinTemperature(weatherData),
-                                modalWeather: groupByMax(weatherData),
-                                rainyDays: countRainyDays(weatherData)
-                                } 
+            if(!myLocation === "") {
+              
+
+              const data = await postData("http://localhost:8081/userData", {location: myLocation, start: myStartDate, end: myEndDate})
             
-            // renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherObj, pixbayData);
-            const id = this.addTrip(myLocation, myStartDate, myEndDate, pixbayData.url, weatherObj.maxTemperature, weatherObj.minTemperature,
-                                    weatherObj.modalWeather, weatherObj.rainyDays, geoNamesData.country)
-            this.createTripElement(id)
-            this.addEventListenersToElem(this.tripElements[this.tripElements.length-1].getAttribute("class").split("-")[2])
-            console.log(this.TripMap)
-            this.setTripsInLocalStorage();
-            updateMostRecentTrip();
+              const returnData = await getData("http://localhost:8081/retrieveData");
+              const [geoNamesData, weatherData, pixbayData] = returnData;
+              const weatherObj = {maxTemperature: getMaxTemperature(weatherData),
+                                  minTemperature: getMinTemperature(weatherData),
+                                  modalWeather: groupByMax(weatherData),
+                                  rainyDays: countRainyDays(weatherData)
+                                  } 
+              
+              // renderTripInfo(myLocation, myStartDate, myEndDate, geoNamesData, weatherObj, pixbayData);
+              const id = this.addTrip(myLocation, myStartDate, myEndDate, pixbayData.url, weatherObj.maxTemperature, weatherObj.minTemperature,
+                                      weatherObj.modalWeather, weatherObj.rainyDays, geoNamesData.country)
+              this.createTripElement(id)
+              this.addEventListenersToElem(this.tripElements[this.tripElements.length-1].getAttribute("class").split("-")[2])
+              console.log(this.TripMap)
+              this.setTripsInLocalStorage();
+              updateMostRecentTrip();
+            } else {
+                errorMsg.textContent = "Please enter a valid location";
+                setTimeout(()=> {
+                    errorMsg.remove();
+                }, 5000)
+            }
         })
 
 
