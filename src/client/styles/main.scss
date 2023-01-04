@@ -79,6 +79,7 @@ body {
 
 .trip-info {
     display: flex;
+    // min-width: 350px;
     // grid-template-columns: repeat(3, 1fr);
     // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
@@ -86,6 +87,7 @@ body {
 .trip-info-container {
     margin-left: 1em;
     margin-top: 0;
+    min-width: 200px;
 }
 
 .destination-info {

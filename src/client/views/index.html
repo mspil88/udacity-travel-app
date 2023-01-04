@@ -35,69 +35,18 @@
                 </div>
             </section>
             <section class="main">
-                
-                
-                <!-- <div class="trip-container">
-                    <div class="nav-container">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <i class="fa-sharp fa-solid fa-trash"></i>
-                    </div>
-                    
-                    <div class="trip-info">
-                        <div class="image-container">
-                            <img class="img-placeholder" alt="location-img"></img>
-                            <div class="to-do-container">
-                                <button class="todo-btn">ToDo</button>
-                            </div>
-                        </div>
-                    
-                        <div class="trip-info-container">
-                            <h1 class="destination-info">Destination: </h1>
-                            <p class="start-info">Start Date: </p>
-                            <p class="end-info">End Date: </p>
-                            <p class="location-duration-days">Trip to Paris is 100 days away</p>
-                            
-                            <h1>Forecast</h1>
-                            <p class="max-temp">Max temperature: </p>
-                            <p class="min-temp">Min temperature: </p>
-                            <p class="mode-weather">Most common forecast: </p>
-                            <p class="count-rain">Days with rain:</p>
-                            
-                        </div>
-                    </div>
-                    
 
-                </div>
-
-                <div class="trip-container">
-                    <div class="nav-container">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <i class="fa-sharp fa-solid fa-trash"></i>
-                    </div>
-                    
-                    <div class="trip-info">
-                        <div class="image-container">
-                            <div class="img-placeholder">some img</div>
-                            <div class="to-do-container">
-                                <button class="todo-btn">ToDo</button>
-                            </div>
-                        </div>
-                    
-                        <div class="trip-info-container">
-                            <h1>Destination: </h1>
-                            <p>Start Date: </p>
-                            <p>End Date: </p>
-                            
-                            
-                        </div>
-                    </div>
-                    
-
-                </div> -->
             </section>
             <footer>
 
             </footer>
         </div>
     </body>
+    <script>
+        if("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/service-worker.js")
+            })
+        }
+    </script>
 </html>
