@@ -387,13 +387,15 @@ const getMostRecentTrip = () => {
   console.log("storedTRIPS")
   console.log(storedTrips)
 
+
   if(storedTrips) {
-    const destinationsToSort = parseDestinationTimes(storedTrips);
-    destinationsToSort.sort((a, b) => {
-        return ((a.date < b.date) ? -1 : ((a.date == b.date) ? 0 : 1));
-    });
-    return returnMostRecentInfo(destinationsToSort)  
-    }
+    if(storedTrips.length !== 0) {
+      const destinationsToSort = parseDestinationTimes(storedTrips);
+      destinationsToSort.sort((a, b) => {
+          return ((a.date < b.date) ? -1 : ((a.date == b.date) ? 0 : 1));
+      });
+      return returnMostRecentInfo(destinationsToSort)  
+    }}
   return null;
 
 }
