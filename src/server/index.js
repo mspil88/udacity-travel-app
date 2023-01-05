@@ -5,13 +5,13 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { moduleExpression } = require("@babel/types");
-dotenv.config();
+// dotenv.config();
 
 //defining keys for submission purpose
 const GEONAMES_USER_NAME = "infinite1861" 
 const WEATHERBIT_API_KEY = "1128eea57b1f47628f05f8eb4f91cbeb"
 const PIXABAY_API_KEY = "32234499-97b8e8b7f8d859ab839b15f28"
-
+      
 const PORT = 8081;
 
 const app = express();
