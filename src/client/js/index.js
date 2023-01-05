@@ -377,8 +377,12 @@ const parseDestinationTimes = (container) => {
 
 const returnMostRecentInfo = (sortedDestinations) => {
   const mostRecent = sortedDestinations[0]
-  const mostRecentDate = convertToYYYMMDD(mostRecent.date)
-  return [mostRecent.name, mostRecentDate, calculateDurationToNow(mostRecentDate) ]
+  if(mostRecent !== undefined){
+    const mostRecentDate = convertToYYYMMDD(mostRecent.date)
+    return [mostRecent.name, mostRecentDate, calculateDurationToNow(mostRecentDate) ]
+  } else {
+    return null;
+  }
 }
 
 const getMostRecentTrip = () => {
